@@ -1,5 +1,5 @@
 import { ApolloServer, gql } from 'apollo-server';
-import { initContext } from '../database/db.js';
+import { initContext } from '../database/resolverService.js';
 
 // Define gql schema
 // @todo move to schema.js
