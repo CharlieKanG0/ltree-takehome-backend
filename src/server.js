@@ -1,8 +1,8 @@
 import { ApolloServer, gql } from 'apollo-server';
-import { initContext } from '../database/resolverService.js';
+import { initContext } from './resolverService.js';
 
 // Define gql schema
-// @todo move to schema.js
+// @TODO move to schema.js
 const typeDef = gql`
     # Query and Mutation
     type Query {
@@ -15,9 +15,22 @@ const typeDef = gql`
 
     type Mutation {
         addClassicLink(input: AddClassicLinkInput!): ClassicLink!
+        # @TODO musiclink mutation
         # addMusicLink(input: AddClassicLinkInput!): MusicLink!
         addShowLink(input: AddShowLinkInput!): ShowLink!
     }
+
+    # @TODO Add validation to schema directives using graphql-constraint-directive
+    # e.g 
+    # type User {
+    #     id: ID!
+    #     name: String! @constraint(pattern: "^[0-9a-zA-Z]*$", maxLength: 20)
+    #     links: [Link] @constraint(pattern: URL regex)
+    # }
+    # type ClassicLink implements Link {
+    #     title: String! @constraint(pattern: "^[0-9a-zA-Z]*$", maxLength: 144)
+    # }
+
 
     # Input types
     input AddClassicLinkInput {
@@ -124,8 +137,9 @@ const typeDef = gql`
 `;
 
 // Define a resolver
-// @todo move to resolvers.js
+// @TODO move to resolvers.js
 const resolvers = {
+    // Resolver functions are passed four arguments: parent, args, context, and info
     Query: {
         allUsers: (_, __, { UserService }) => UserService.allUsers(),
         userByUserId: (_, { id }, { UserService }) => UserService.userByUserId({ id }),
@@ -137,16 +151,17 @@ const resolvers = {
     Mutation: {
         addClassicLink: (_, { input }, { LinkService, DbContext }) => LinkService.addClassicLink({ classicLinkInput: input, db: DbContext }),
         addShowLink: (_, { input }, { LinkService, DbContext }) => LinkService.addShowLink({ showLinkInput: input, db: DbContext }),
+        // @TODO musiclink mutation
     },
 
     // Resolver chain
-    // Resolver functions are passed four arguments: parent, args, context, and info
     User: {
         links: (user, _, {LinkService}) => LinkService.linksByUserId({ id: user.id })
     },
     Link: {
         __resolveType(link) {
             switch (link.type) {
+                case "CLASSIC": return 'ClassicLink';
                 case "SHOWS": return 'ShowLink';
                 case "MUSIC": return 'MusicLink';
                 default: return 'ClassicLink';

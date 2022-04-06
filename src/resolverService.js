@@ -3,6 +3,7 @@ import { Low, JSONFile, LowSync, JSONFileSync } from 'lowdb';
 import { nanoid } from 'nanoid';
 const MAX_LENGTH = 144;
 
+// Setup context to be used by gql and setup json db
 export const initContext = () => {
     const db = new LowSync(new JSONFileSync('database/db.json'));
     db.read();
@@ -15,7 +16,7 @@ export const initContext = () => {
     };
 };
 
-// Resolver service
+// User resolver service
 const userService = (users) => {
     const allUsers = () => users;
     const userByUserId = ({ id }) => users.find(u => u.id === id);
@@ -23,6 +24,7 @@ const userService = (users) => {
     return { userByUserId, allUsers };
 }; 
 
+// Link resolver service
 const linkService = (links) => {
     // Query
     const allLinks = () => links;
@@ -40,9 +42,7 @@ const linkService = (links) => {
   
     // Mutation
     const addClassicLink = ({ classicLinkInput, db }) => {
-        // @TODO
-        // option 1: create an independant validation service to handle all validation logics
-        // option 2: add validation to schema directives using graphql-constraint-directive
+        // @TODO create an independant validation service to handle all validation logics and errors
         if (classicLinkInput.title.length > MAX_LENGTH) {
             throw new UserInputError(`title lengths must be less than ${MAX_LENGTH}`)
         }
@@ -69,6 +69,8 @@ const linkService = (links) => {
         db.write();
         return newShowLink;
     };
+
+    // @TODO MusicLink
   
     return { allLinks, linkByLinkId, linksByUserId, addClassicLink, addShowLink};
 };
