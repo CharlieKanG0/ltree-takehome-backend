@@ -10,7 +10,7 @@ const typeDef = gql`
         userByUserId(id: ID!): User
         allLinks: [Link]!
         linkByLinkId(id: ID!): Link
-        linksByUserId(id: ID!): [Link]
+        linksByUserId(id: ID!, sortByDateAscending: Boolean): [Link]
     }
 
     type Mutation {
@@ -131,7 +131,7 @@ const resolvers = {
         userByUserId: (_, { id }, { UserService }) => UserService.userByUserId({ id }),
         allLinks: (_, __, { LinkService }) => LinkService.allLinks(),
         linkByLinkId: (_, { id }, { LinkService }) => LinkService.linkByLinkId({ id }),
-        linksByUserId: (_, { id }, { LinkService }) => LinkService.linksByUserId({ id }),
+        linksByUserId: (_, { id, sortByDateAscending }, { LinkService }) => LinkService.linksByUserId({ id, sortByDateAscending }),
     },
 
     Mutation: {

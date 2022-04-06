@@ -27,7 +27,16 @@ const linkService = (links) => {
     // Query
     const allLinks = () => links;
     const linkByLinkId = ({ id }) => links.find(l => l.id === id);
-    const linksByUserId = ({ id }) => links.filter(l => l.userId === id);
+    const linksByUserId = ({ id, sortByDateAscending }) => {
+        const filteredLinks = links.filter(l => l.userId === id);
+        if (sortByDateAscending === undefined) return filteredLinks;
+
+        if (!!sortByDateAscending) {
+            return filteredLinks.sort((a,b) => a.createdDateTime - b.createdDateTime);
+        } else {
+            return filteredLinks.sort((a,b) => b.createdDateTime - a.createdDateTime);
+        }
+    }
   
     // Mutation
     const addClassicLink = ({ classicLinkInput, db }) => {
