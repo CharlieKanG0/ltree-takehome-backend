@@ -1,0 +1,36 @@
+{
+  "users": [
+    {
+      "id": "u11",
+      "name": "Charlie Kang"
+    },
+    {
+      "id": "u22",
+      "name": "Jane Elizabeth"
+    },
+    {
+      "id": "u33",
+      "name": "Matt Mate"
+    }
+  ],
+  "links": [
+    {
+      "id": "l11",
+      "title": "My google",
+      "url": "https://google.com",
+      "userId": "u11"
+    },
+    {
+      "id": "l22",
+      "title": "My instagram",
+      "url": "https://instagram.com",
+      "userId": "u11"
+    },
+    {
+      "id": "l33",
+      "title": "My youtube",
+      "url": "https://youtube.com",
+      "userId": "u22"
+    }
+  ]
+}
